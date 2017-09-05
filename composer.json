@@ -1,0 +1,35 @@
+{
+    "name": "futuretek/yii2-shared",
+    "description": "Shared tools used in FTS.",
+    "keywords": [
+        "extension",
+        "shared",
+        "tools"
+    ],
+    "type": "yii2-extension",
+    "license": "Apache-2.0",
+    "homepage": "http://www.futuretek.cz/",
+    "authors": [
+        {
+            "name": "Lukas Cerny",
+            "email": "lukas.cerny@futuretek.cz",
+            "homepage": "http://www.futuretek.cz",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://jira.futuretek.cz/browse/YII",
+        "wiki": "https://doc.futuretek.cz/display/YII",
+        "source": "https://git.futuretek.cz/projects/YII/repos/ext-shared/browse"
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "giggsey/libphonenumber-for-php": "~7.0",
+        "aferrandini/phpqrcode": "1.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "futuretek\\shared\\": ""
+        }
+    }
+}
