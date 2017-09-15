@@ -18,9 +18,9 @@
         }
     ],
     "support": {
-        "issues": "https://jira.futuretek.cz/browse/YII",
-        "wiki": "https://doc.futuretek.cz/display/YII",
-        "source": "https://git.futuretek.cz/projects/YII/repos/ext-shared/browse"
+        "issues": "https://github.com/futuretek-solutions-ltd/ext-yii2-shared/issues",
+        "wiki": "https://github.com/futuretek-solutions-ltd/ext-yii2-shared/wiki",
+        "source": "https://github.com/futuretek-solutions-ltd/ext-yii2-shared"
     },
     "require": {
         "php": ">=5.4.0",
