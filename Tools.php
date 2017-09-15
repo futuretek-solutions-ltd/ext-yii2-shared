@@ -539,6 +539,7 @@ class Tools
             }
             if ($deleteSelf && !rmdir($dirName)) {
                 @chmod($dirName, 0777); // NT ?
+
                 return false;
             }
 
@@ -1049,6 +1050,7 @@ class Tools
             return true;
         }
         $easter->add(new \DateInterval('P3D')); //Monday
+
         return ($easter->format('Y-m-d') === $date->format('Y-m-d'));
     }
 
@@ -1468,5 +1470,49 @@ class Tools
         }
 
         return $workedTime;
+    }
+
+    /**
+     * Transpose an array
+     *
+     * @param array $array Array to transpose
+     * @return array
+     */
+    public static function transpose($array)
+    {
+        return array_map(null, ...$array);
+    }
+
+    /**
+     * Get max count of multiple arrays
+     *
+     * @param array ...$array Array of arrays to count
+     * @return int Max item count
+     */
+    public static function maxCount(...$array)
+    {
+        $maxCnt = 0;
+        foreach ($array as $item) {
+            $cnt = count($item);
+            $maxCnt = $cnt > $maxCnt ? $cnt : $maxCnt;
+        }
+
+        return $maxCnt;
+    }
+
+    /**
+     * Extend array to desired size by filling it with fill data
+     *
+     * @param array $array Array to fill
+     * @param int $size Desired size
+     * @param mixed $fill Fill data
+     */
+    public static function fillToSize(&$array, $size, $fill)
+    {
+        $cnt = count($array);
+        if ($cnt >= $size) {
+            return;
+        }
+        $array = array_merge($array, array_fill($cnt + 1, $size - $cnt, $fill));
     }
 }

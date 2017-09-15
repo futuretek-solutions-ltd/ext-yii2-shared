@@ -23,7 +23,7 @@
         "source": "https://github.com/futuretek-solutions-ltd/ext-yii2-shared"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "giggsey/libphonenumber-for-php": "~7.0",
         "aferrandini/phpqrcode": "1.0.*"
     },
