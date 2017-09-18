@@ -826,4 +826,15 @@ class Validate
         return (bool)preg_match('/^(?:(?<weeks>\d+)w\s*)?(?:(?<days>\d+)d\s*)?(?:(?<hours>\d+)h\s*)?(?:(?<minutes>\d+)m\s*)?(?:(?<seconds>\d+)s\s*)?$/', $time);
     }
 
+    /**
+     * Check if input string is link-rewrite
+     *
+     * @param string $name Name to validate
+     *
+     * @return boolean Validity is ok or not
+     */
+    public static function isLinkRewrite($name)
+    {
+        return preg_match('/^[a-z0-9-]*$/u', $name);
+    }
 }
