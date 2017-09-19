@@ -436,7 +436,26 @@ class QRPayment
     public static function accountToIBAN($account, $country = 'CZ')
     {
         $allowedCountries = ['AT', 'BE', 'BG', 'CZ', 'CY', 'DK', 'EE', 'FI', 'FR', 'DE', 'GI', 'GR', 'HU', 'IE', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SE', 'CH', 'SI', 'SK', 'ES', 'GB'];
-        $accountArray = explode('/', str_replace('-', '', str_replace(' ', '', $account)));
+
+        $account = str_replace(' ', '', $account);
+
+        if (false !== strpos($account, '-')) {
+            $parts = explode('-', $account);
+            $parts[0] = str_pad($parts[0], 6, '0', STR_PAD_LEFT);
+            $parts2 = explode('/', $parts[1]);
+            $parts2[0] = str_pad($parts2[0], 10, '0', STR_PAD_LEFT);
+            $parts2[1] = str_pad($parts2[1], 4, '0', STR_PAD_LEFT);
+            $parts[1] = implode('/', $parts2);
+            $account = implode('-', $parts);
+
+        } else {
+            $parts = explode('/', $account);
+            $parts[0] = str_pad($parts[0], 10, '0', STR_PAD_LEFT);
+            $parts[1] = str_pad($parts[1], 4, '0', STR_PAD_LEFT);
+            $account = implode('/', $parts);
+        }
+
+        $accountArray = explode('/', str_replace('-', '', $account));
         if (2 !== count($accountArray)) {
             throw new RuntimeException(Tools::poorManTranslate('fts-shared', 'Wrong bank account (some part missing).'));
         }
