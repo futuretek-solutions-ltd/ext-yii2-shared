@@ -1480,7 +1480,8 @@ class Tools
      */
     public static function transpose($array)
     {
-        return array_map(null, ...$array);
+        array_unshift($array, null);
+        return call_user_func_array('array_map', $array);
     }
 
     /**
@@ -1489,10 +1490,18 @@ class Tools
      * @param array ...$array Array of arrays to count
      * @return int Max item count
      */
-    public static function maxCount(...$array)
+    public static function maxCount()
     {
+        $array = func_get_args();
+        if (!is_array($array)) {
+            return 0;
+        }
+
         $maxCnt = 0;
         foreach ($array as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
             $cnt = count($item);
             $maxCnt = $cnt > $maxCnt ? $cnt : $maxCnt;
         }
