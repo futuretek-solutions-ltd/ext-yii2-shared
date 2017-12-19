@@ -66,6 +66,32 @@ class Tools
     /** Sunday */
     const DOW_SUNDAY = 6;
 
+    private static $_countryCodes = array(
+        'AND' => 'AD', 'ARE' => 'AE', 'AFG' => 'AF', 'ATG' => 'AG', 'AIA' => 'AI', 'ALB' => 'AL', 'ARM' => 'AM', 'ANT' => 'AN', 'AGO' => 'AO', 'ARG' => 'AR',
+        'ASM' => 'AS', 'AUT' => 'AT', 'AUS' => 'AU', 'ABW' => 'AW', 'AZE' => 'AZ', 'BIH' => 'BA', 'BRB' => 'BB', 'BGD' => 'BD', 'BEL' => 'BE', 'BFA' => 'BF',
+        'BGR' => 'BG', 'BHR' => 'BH', 'BDI' => 'BI', 'BEN' => 'BJ', 'BMU' => 'BM', 'BRN' => 'BN', 'BOL' => 'BO', 'BRA' => 'BR', 'BHS' => 'BS', 'BTN' => 'BT',
+        'BWA' => 'BW', 'BLR' => 'BY', 'BLZ' => 'BZ', 'CAN' => 'CA', 'COD' => 'CD', 'CAF' => 'CF', 'COG' => 'CG', 'CIV' => 'CI', 'COK' => 'CK', 'CHL' => 'CL',
+        'CMR' => 'CM', 'CHN' => 'CN', 'COL' => 'CO', 'CRI' => 'CR', 'CUB' => 'CU', 'CPV' => 'CV', 'CYP' => 'CY', 'CZE' => 'CZ', 'DEU' => 'DE', 'DJI' => 'DJ',
+        'DNK' => 'DK', 'DMA' => 'DM', 'DOM' => 'DO', 'DZA' => 'DZ', 'ECU' => 'EC', 'EST' => 'EE', 'EGY' => 'EG', 'ESH' => 'EH', 'ERI' => 'ER', 'ESP' => 'ES',
+        'ETH' => 'ET', 'FIN' => 'FI', 'FJI' => 'FJ', 'FLK' => 'FK', 'FSM' => 'FM', 'FRO' => 'FO', 'FRA' => 'FR', 'GAB' => 'GA', 'GBR' => 'GB', 'GRD' => 'GD',
+        'GEO' => 'GE', 'GUF' => 'GF', 'GHA' => 'GH', 'GIB' => 'GI', 'GRL' => 'GL', 'GMB' => 'GM', 'GIN' => 'GN', 'GLP' => 'GP', 'GNQ' => 'GQ', 'GRC' => 'GR',
+        'GTM' => 'GT', 'GUM' => 'GU', 'GNB' => 'GW', 'GUY' => 'GY', 'HKG' => 'HK', 'HND' => 'HN', 'HRV' => 'HR', 'HTI' => 'HT', 'HUN' => 'HU', 'CHE' => 'CH',
+        'IDN' => 'ID', 'IRL' => 'IE', 'ISR' => 'IL', 'IND' => 'IN', 'IRQ' => 'IQ', 'IRN' => 'IR', 'ISL' => 'IS', 'ITA' => 'IT', 'JAM' => 'JM', 'JOR' => 'JO',
+        'JPN' => 'JP', 'KEN' => 'KE', 'KGZ' => 'KG', 'KHM' => 'KH', 'KIR' => 'KI', 'COM' => 'KM', 'KNA' => 'KN', 'PRK' => 'KP', 'KOR' => 'KR', 'KWT' => 'KW',
+        'CYM' => 'KY', 'KAZ' => 'KZ', 'LAO' => 'LA', 'LBN' => 'LB', 'LCA' => 'LC', 'LIE' => 'LI', 'LKA' => 'LK', 'LBR' => 'LR', 'LSO' => 'LS', 'LTU' => 'LT',
+        'LUX' => 'LU', 'LVA' => 'LV', 'LBY' => 'LY', 'MAR' => 'MA', 'MCO' => 'MC', 'MDA' => 'MD', 'MDG' => 'MG', 'MHL' => 'MH', 'MKD' => 'MK', 'MLI' => 'ML',
+        'MMR' => 'MM', 'MNG' => 'MN', 'MAC' => 'MO', 'MNP' => 'MP', 'MTQ' => 'MQ', 'MRT' => 'MR', 'MSR' => 'MS', 'MLT' => 'MT', 'MUS' => 'MU', 'MDV' => 'MV',
+        'MWI' => 'MW', 'MEX' => 'MX', 'MYS' => 'MY', 'MOZ' => 'MZ', 'NAM' => 'NA', 'NCL' => 'NC', 'NER' => 'NE', 'NFK' => 'NF', 'NGA' => 'NG', 'NIC' => 'NI',
+        'NLD' => 'NL', 'NOR' => 'NO', 'NPL' => 'NP', 'NRU' => 'NR', 'NIU' => 'NU', 'NZL' => 'NZ', 'OMN' => 'OM', 'PAN' => 'PA', 'PER' => 'PE', 'PYF' => 'PF',
+        'PNG' => 'PG', 'PHL' => 'PH', 'PAK' => 'PK', 'POL' => 'PL', 'SPM' => 'PM', 'PCN' => 'PN', 'PRI' => 'PR', 'PRT' => 'PT', 'PLW' => 'PW', 'PRY' => 'PY',
+        'QAT' => 'QA', 'REU' => 'RE', 'ROM' => 'RO', 'RUS' => 'RU', 'RWA' => 'RW', 'SAU' => 'SA', 'SLB' => 'SB', 'SYC' => 'SC', 'SDN' => 'SD', 'SWE' => 'SE',
+        'SGP' => 'SG', 'SHN' => 'SH', 'SVN' => 'SI', 'SJM' => 'SJ', 'SVK' => 'SK', 'SLE' => 'SL', 'SMR' => 'SM', 'SEN' => 'SN', 'SOM' => 'SO', 'SUR' => 'SR',
+        'STP' => 'ST', 'SLV' => 'SV', 'SYR' => 'SY', 'SWZ' => 'SZ', 'TCA' => 'TC', 'TCD' => 'TD', 'TGO' => 'TG', 'THA' => 'TH', 'TJK' => 'TJ', 'TKL' => 'TK',
+        'TKM' => 'TM', 'TUN' => 'TN', 'TON' => 'TO', 'TUR' => 'TR', 'TTO' => 'TT', 'TUV' => 'TV', 'TWN' => 'TW', 'TZA' => 'TZ', 'UKR' => 'UA', 'UGA' => 'UG',
+        'USA' => 'US', 'URY' => 'UY', 'UZB' => 'UZ', 'VAT' => 'VA', 'VCT' => 'VC', 'VEN' => 'VE', 'VGB' => 'VG', 'VIR' => 'VI', 'VNM' => 'VN', 'VUT' => 'VU',
+        'WLF' => 'WF', 'WSM' => 'WS', 'YEM' => 'YE', 'ZAF' => 'ZA', 'ZMB' => 'ZM', 'ZWE' => 'ZW',
+    );
+
     /**
      * Remove all space characters in string
      *
@@ -1523,5 +1549,36 @@ class Tools
             return;
         }
         $array = array_merge($array, array_fill($cnt + 1, $size - $cnt, $fill));
+    }
+
+    /**
+     * Converts two digit country code to three digit one or return false if code does not exists
+     *
+     * @param string $code Two digit country code
+     * @return string|false
+     */
+    public static function countryCodeTwoToThree($code)
+    {
+        $codes = array_flip(self::$_countryCodes);
+        if (!array_key_exists($code, $codes)) {
+            return false;
+        }
+
+        return $codes[$code];
+    }
+
+    /**
+     * Converts three digit country code to two digit one or return false if code does not exists
+     *
+     * @param string $code Three digit country code
+     * @return string|false
+     */
+    public static function countryCodeThreeToTwo($code)
+    {
+        if (!array_key_exists($code, self::$_countryCodes)) {
+            return false;
+        }
+
+        return self::$_countryCodes[$code];
     }
 }
