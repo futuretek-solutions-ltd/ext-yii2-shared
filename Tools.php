@@ -1046,6 +1046,7 @@ class Tools
      * @param string|DateTime|int $date Any valid date or datetime
      *
      * @return bool Is holiday
+     * @throws \Exception
      * @throws RuntimeException
      * @static
      */
@@ -1196,21 +1197,21 @@ class Tools
     {
         if (class_exists('Yii')) {
             return \Yii::t($category, $text, $params);
-        } else {
-            $pos = strrpos($category, '/');
-            $category = $pos === false ? $category : substr($category, $pos + 1);
-            $translation = @include_once 'messages/cs/' . $category . '.php';
-            if ($translation !== null && is_array($translation) && array_key_exists($text, $translation)) {
-                $keys = array_keys($params);
-                array_walk($keys, function (&$v) {
-                    $v = '{' . $v . '}';
-                });
-
-                return str_replace(array_values($params), $keys, $translation[$text]);
-            } else {
-                return $text;
-            }
         }
+
+        $pos = strrpos($category, '/');
+        $category = $pos === false ? $category : substr($category, $pos + 1);
+        $translation = @include 'messages/cs/' . $category . '.php';
+        if ($translation !== null && is_array($translation) && array_key_exists($text, $translation)) {
+            $keys = array_keys($params);
+            array_walk($keys, function (&$v) {
+                $v = '{' . $v . '}';
+            });
+
+            return str_replace(array_values($params), $keys, $translation[$text]);
+        }
+
+        return $text;
     }
 
     /**
@@ -1443,6 +1444,7 @@ class Tools
      * @param string $timeZone Timezone @see http://php.net/manual/en/timezones.php
      * @return int Difference in seconds
      *
+     * @throws \Exception
      * @throws RuntimeException
      */
     public static function secondsBetweenWorkingDays($dateFrom, $dateTo, $workDayFrom, $workDayTo, $weekends = false, $holidays = false, $timeZone = 'Europe/Prague')
@@ -1507,6 +1509,7 @@ class Tools
     public static function transpose($array)
     {
         array_unshift($array, null);
+
         return call_user_func_array('array_map', $array);
     }
 
