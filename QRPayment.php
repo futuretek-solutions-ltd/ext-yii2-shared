@@ -426,6 +426,28 @@ class QRPayment
     }
 
     /**
+     * Normalize account number
+     *
+     * @param string $account Account number
+     * @return string
+     */
+    public static function normalizeAccountNumber($account)
+    {
+        $account = str_replace(' ', '', $account);
+        if (false === strpos($account, '-')) {
+            $account = '000000-' . $account;
+        }
+        $parts = explode('-', $account);
+        $parts[0] = str_pad($parts[0], 6, '0', STR_PAD_LEFT);
+        $parts2 = explode('/', $parts[1]);
+        $parts2[0] = str_pad($parts2[0], 10, '0', STR_PAD_LEFT);
+        $parts2[1] = str_pad($parts2[1], 4, '0', STR_PAD_LEFT);
+        $parts[1] = implode('/', $parts2);
+
+        return implode('-', $parts);
+    }
+
+    /**
      * Convert bank account number to IBAN
      *
      * @param string $account Normal account number in format: prefix-account/bank
@@ -437,23 +459,7 @@ class QRPayment
     {
         $allowedCountries = ['AT', 'BE', 'BG', 'CZ', 'CY', 'DK', 'EE', 'FI', 'FR', 'DE', 'GI', 'GR', 'HU', 'IE', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SE', 'CH', 'SI', 'SK', 'ES', 'GB'];
 
-        $account = str_replace(' ', '', $account);
-
-        if (false !== strpos($account, '-')) {
-            $parts = explode('-', $account);
-            $parts[0] = str_pad($parts[0], 6, '0', STR_PAD_LEFT);
-            $parts2 = explode('/', $parts[1]);
-            $parts2[0] = str_pad($parts2[0], 10, '0', STR_PAD_LEFT);
-            $parts2[1] = str_pad($parts2[1], 4, '0', STR_PAD_LEFT);
-            $parts[1] = implode('/', $parts2);
-            $account = implode('-', $parts);
-
-        } else {
-            $parts = explode('/', $account);
-            $parts[0] = str_pad($parts[0], 10, '0', STR_PAD_LEFT);
-            $parts[1] = str_pad($parts[1], 4, '0', STR_PAD_LEFT);
-            $account = implode('/', $parts);
-        }
+        $account = self::normalizeAccountNumber($account);
 
         $accountArray = explode('/', str_replace('-', '', $account));
         if (2 !== count($accountArray)) {
