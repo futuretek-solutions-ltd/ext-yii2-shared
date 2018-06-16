@@ -101,7 +101,7 @@ class SysInfo
         $lines = explode("\n", trim(shell_exec('df')));
         array_shift($lines);
         foreach ($lines as &$line) {
-            if (substr($line, 0, 1) === '/') {
+            if (0 === strpos($line, '/')) {
                 $result[] = explode("\t", $line);
             }
         }
@@ -120,11 +120,12 @@ class SysInfo
         if (self::isWindows()) {
             $uuid = explode("\r\n", trim(shell_exec('wmic csproduct get UUID')));
 
-            return (count($uuid) === 2 ? $uuid[1] : false);
-        } else {
-            $uuid = trim(shell_exec('hostid'));
-            return ($uuid === null ? false : $uuid);
+            return (\\count($uuid) === 2 ? $uuid[1] : false);
         }
+
+        $uuid = trim(shell_exec('hostid'));
+
+        return $uuid === null ? false : $uuid;
     }
 
     /**
@@ -140,7 +141,7 @@ class SysInfo
 
     public static function isWindows()
     {
-        return (strtoupper(substr(php_uname('s'), 0, 3)) === 'WIN');
+        return (0 === stripos(PHP_OS, 'WIN'));
     }
 
     /**
@@ -152,7 +153,7 @@ class SysInfo
     {
         $version = null;
 
-        if (defined('PHP_VERSION')) {
+        if (\defined('PHP_VERSION')) {
             $version = PHP_VERSION;
         } else {
             $version = phpversion('');
@@ -205,8 +206,8 @@ class SysInfo
      */
     public static function isPhpCli()
     {
-        return (defined('STDIN') ||
-            (strtolower(php_sapi_name()) === 'cli' && (!array_key_exists('REMOTE_ADDR', $_SERVER) || empty($_SERVER['REMOTE_ADDR']))));
+        return (\defined('STDIN') ||
+            (strtolower(PHP_SAPI) === 'cli' && (!array_key_exists('REMOTE_ADDR', $_SERVER) || empty($_SERVER['REMOTE_ADDR']))));
     }
 
     /**

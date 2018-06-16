@@ -15,6 +15,11 @@ use libphonenumber\PhoneNumberUtil;
  */
 class Validate
 {
+    const PASSWORD_COMPLEXITY_WEAK = 2;
+    const PASSWORD_COMPLEXITY_MEDIUM = 3;
+    const PASSWORD_COMPLEXITY_STRONG = 4;
+    const PASSWORD_COMPLEXITY_VERY_STRONG = 6;
+
     /**
      * Administrator password length
      */
@@ -96,7 +101,7 @@ class Validate
      */
     public static function isOptFloat($float)
     {
-        return $float === null || Validate::isFloat($float);
+        return $float === null || self::isFloat($float);
     }
 
     /**
@@ -108,7 +113,7 @@ class Validate
      */
     public static function isMailName($mail_name)
     {
-        return (is_string($mail_name) && preg_match('/^[^<>;=#{}]*$/u', $mail_name));
+        return (\is_string($mail_name) && preg_match('/^[^<>;=#{}]*$/u', $mail_name));
     }
 
     /**
@@ -266,12 +271,12 @@ class Validate
      */
     public static function isPasswd($passwd, $size = Validate::PASSWORD_LENGTH)
     {
-        return (strlen($passwd) >= $size && strlen($passwd) < 255);
+        return self::getPasswordComplexity($passwd, $size) >= self::PASSWORD_COMPLEXITY_MEDIUM;
     }
 
     public static function isPasswdAdmin($passwd)
     {
-        return Validate::isPasswd($passwd, Validate::ADMIN_PASSWORD_LENGTH);
+        return self::getPasswordComplexity($passwd, self::ADMIN_PASSWORD_LENGTH) >= self::PASSWORD_COMPLEXITY_STRONG;
     }
 
     /**
@@ -345,20 +350,20 @@ class Validate
      */
     public static function isBool($bool)
     {
-        return $bool === null || is_bool($bool) || preg_match('/^0|1$/', $bool);
+        return $bool === null || \is_bool($bool) || preg_match('/^0|1$/', $bool);
     }
 
     /**
      * Check for phone number validity
      *
      * @param string $number Phone number to validate
-     * @deprecated Please use rather Tools::isPhoneNumber2()
+     * @param string $country Two digit uppercase country code (CZ, US, AU)
      *
      * @return boolean Validity is ok or not
      */
-    public static function isPhoneNumber($number)
+    public static function isPhoneNumber($number, $country)
     {
-        return preg_match('/^\+?(?:\d ?){6,14}\d(?:x\d+)?$/', $number);
+        return self::isPhoneNumber2($number, $country);
     }
 
     /**
@@ -523,7 +528,7 @@ class Validate
      */
     public static function isPercentage($value)
     {
-        return (Validate::isFloat($value) && $value >= 0 && $value <= 100);
+        return (self::isFloat($value) && $value >= 0 && $value <= 100);
     }
 
     /**
@@ -536,12 +541,12 @@ class Validate
      */
     public static function isUnsignedId($id)
     {
-        return Validate::isUnsignedInt($id); /* Because an id could be equal to zero when there is no association */
+        return self::isUnsignedInt($id); /* Because an id could be equal to zero when there is no association */
     }
 
     public static function isNullOrUnsignedId($id)
     {
-        return $id === null || Validate::isUnsignedId($id);
+        return $id === null || self::isUnsignedId($id);
     }
 
     /**
@@ -553,7 +558,7 @@ class Validate
      */
     public static function isLoadedObject($object)
     {
-        return is_object($object) && $object->id;
+        return \is_object($object) && $object->id;
     }
 
     /**
@@ -601,7 +606,7 @@ class Validate
      */
     public static function isUrlOrEmpty($url)
     {
-        return $url === null || Validate::isUrl($url);
+        return $url === null || self::isUrl($url);
     }
 
     /**
@@ -653,12 +658,12 @@ class Validate
 
     public static function isWeightUnit($unit)
     {
-        return (Validate::isGenericName($unit) & (strlen($unit) < 5));
+        return (self::isGenericName($unit) & (\strlen($unit) < 5));
     }
 
     public static function isDistanceUnit($unit)
     {
-        return (Validate::isGenericName($unit) & (strlen($unit) < 5));
+        return (self::isGenericName($unit) & (\strlen($unit) < 5));
     }
 
     public static function isSubDomainName($domain)
@@ -675,7 +680,7 @@ class Validate
      */
     public static function isString($data)
     {
-        return is_string($data);
+        return \is_string($data);
     }
 
     /**
@@ -687,7 +692,7 @@ class Validate
      */
     public static function isSerializedArray($data)
     {
-        return $data === null || (is_string($data) && preg_match('/^a:\d+:{.*;}$/s', $data));
+        return $data === null || (\is_string($data) && preg_match('/^a:\d+:{.*;}$/s', $data));
     }
 
     /**
@@ -722,9 +727,9 @@ class Validate
      */
     public static function isArrayWithIds($ids)
     {
-        if (count($ids)) {
+        if (\count($ids)) {
             foreach ($ids as $id) {
-                if ((int)$id === 0 || !Validate::isUnsignedInt($id)) {
+                if ((int)$id === 0 || !self::isUnsignedInt($id)) {
                     return false;
                 }
             }
@@ -745,7 +750,7 @@ class Validate
     {
         $phoneNumber = substr(Tools::removeSpace($phone), -9, 1);
 
-        return (!Validate::isCzechPhoneNumber($phoneNumber) || ($phoneNumber === '6' || $phoneNumber === '7'));
+        return (!self::isCzechPhoneNumber($phoneNumber) || ($phoneNumber === '6' || $phoneNumber === '7'));
     }
 
     /**
@@ -836,5 +841,47 @@ class Validate
     public static function isLinkRewrite($name)
     {
         return preg_match('/^[a-z0-9-]*$/u', $name);
+    }
+
+    /**
+     * Get password complexity
+     *
+     * @param string $password Password
+     * @param int $minLength Minimal length
+     * @return int Password score
+     */
+    public static function getPasswordComplexity($password, $minLength)
+    {
+        $group = [
+            'upper' => '/[A-Z]/',
+            'lower' => '/[a-z]/',
+            'number' => '/[0-9]/',
+            'special' => '/[^A-Za-z0-9]/',
+        ];
+        $score = 0;
+        $length = \strlen($password);
+
+        if ($length < $minLength) {
+            return 0;
+        }
+
+        // Increment the score for each of these conditions
+        foreach ($group as $pattern) {
+            if (preg_match($pattern, $password)) {
+                $score++;
+            }
+        }
+
+        // Penalize if there aren't at least three char types
+        if ($score < 3) {
+            $score--;
+        }
+
+        // Increment the score for every 2 chars longer than the minimum
+        if ($length > $minLength) {
+            $score += (int)floor(($length - $minLength) / 2);
+        }
+
+        return $score;
     }
 }

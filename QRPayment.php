@@ -198,7 +198,7 @@ class QRPayment
      */
     public function setPaymentType($paymentType)
     {
-        if (!in_array($paymentType, [self::PAYMENT_PEER_TO_PEER], true)) {
+        if (self::PAYMENT_PEER_TO_PEER !== $paymentType) {
             throw new RuntimeException(Tools::poorManTranslate('fts-shared', 'Invalid payment type.'));
         }
 
@@ -226,7 +226,7 @@ class QRPayment
      */
     public function setNotifyType($notifyType)
     {
-        if (!in_array($notifyType, [self::NOTIFY_EMAIL, self::NOTIFY_PHONE], true)) {
+        if (!\in_array($notifyType, [self::NOTIFY_EMAIL, self::NOTIFY_PHONE], true)) {
             throw new RuntimeException(Tools::poorManTranslate('fts-shared', 'Invalid notify type.'));
         }
 
@@ -462,21 +462,21 @@ class QRPayment
         $account = self::normalizeAccountNumber($account);
 
         $accountArray = explode('/', str_replace('-', '', $account));
-        if (2 !== count($accountArray)) {
+        if (2 !== \count($accountArray)) {
             throw new RuntimeException(Tools::poorManTranslate('fts-shared', 'Wrong bank account (some part missing).'));
         }
 
         $country = strtoupper($country);
-        if (!in_array($country, $allowedCountries, true)) {
+        if (!\in_array($country, $allowedCountries, true)) {
             throw new RuntimeException(Tools::poorManTranslate('fts-shared', 'Invalid country code.'));
         }
 
-        $accountStr = str_pad($accountArray[1], 4, '0', STR_PAD_LEFT) . str_pad($accountArray[0], 16, '0', STR_PAD_LEFT) . (ord($country[0]) - 55) . (ord($country[1]) - 55) . '00';
+        $accountStr = str_pad($accountArray[1], 4, '0', STR_PAD_LEFT) . str_pad($accountArray[0], 16, '0', STR_PAD_LEFT) . (\ord($country[0]) - 55) . (\ord($country[1]) - 55) . '00';
         $crc = '';
         $pos = 0;
 
-        while (strlen($accountStr) > 0) {
-            $len = 9 - strlen($crc);
+        while (\strlen($accountStr) > 0) {
+            $len = 9 - \strlen($crc);
             $crc = (int)($crc . substr($accountStr, $pos, $len)) % 97;
             $accountStr = substr($accountStr, $len);
         }

@@ -65,33 +65,41 @@ class Xml
      * @return \SimpleXMLElement|\DOMDocument SimpleXMLElement or DOMDocument
      * @throws \RuntimeException
      */
-    public static function build($input, $options = [])
+    public static function build($input, array $options = [])
     {
-        if (!is_array($options)) {
-            $options = array('return' => (string)$options);
+        if (!\is_array($options)) {
+            $options = ['return' => (string)$options];
         }
-        $defaults = array(
-            'return' => 'simplexml'
-        );
+        $defaults = [
+            'return' => 'simplexml',
+        ];
         $options = array_merge($defaults, $options);
 
         if (is_array($input) || is_object($input)) {
             return self::fromArray((array)$input, $options);
-        } elseif (strpos($input, '<') !== false) {
+        }
+
+        if (strpos($input, '<') !== false) {
             if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
                 return new \SimpleXMLElement($input, LIBXML_NOCDATA);
             }
             $dom = new \DOMDocument();
             $dom->loadXML($input);
+
             return $dom;
-        } elseif (file_exists($input) || strpos($input, 'http://') === 0 || strpos($input, 'https://') === 0) {
+        }
+
+        if (file_exists($input) || strpos($input, 'http://') === 0 || strpos($input, 'https://') === 0) {
             if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
                 return new \SimpleXMLElement($input, LIBXML_NOCDATA, true);
             }
             $dom = new \DOMDocument();
             $dom->load($input);
+
             return $dom;
-        } elseif (!is_string($input)) {
+        }
+
+        if (!\is_string($input)) {
             throw new \RuntimeException(Tools::poorManTranslate('fts-shared', 'Invalid input.'));
         }
         throw new \RuntimeException(Tools::poorManTranslate('fts-shared', 'XML cannot be read.'));
@@ -134,25 +142,25 @@ class Xml
      * @return \SimpleXMLElement|\DOMDocument SimpleXMLElement or DOMDocument
      * @throws \RuntimeException
      */
-    public static function fromArray($input, $options = array())
+    public static function fromArray($input, array $options = [])
     {
-        if (!is_array($input) || count($input) !== 1) {
+        if (!\is_array($input) || \count($input) !== 1) {
             throw new \RuntimeException(Tools::poorManTranslate('fts-shared', 'Invalid input.'));
         }
         $key = key($input);
-        if (is_int($key)) {
+        if (\is_int($key)) {
             throw new \RuntimeException(Tools::poorManTranslate('fts-shared', 'The key of input must be alphanumeric.'));
         }
 
-        if (!is_array($options)) {
-            $options = array('format' => (string)$options);
+        if (!\is_array($options)) {
+            $options = ['format' => (string)$options];
         }
-        $defaults = array(
+        $defaults = [
             'format' => 'tags',
             'version' => '1.0',
             'encoding' => 'utf-8',
-            'return' => 'simplexml'
-        );
+            'return' => 'simplexml',
+        ];
         $options = array_merge($defaults, $options);
 
         $dom = new \DOMDocument($options['version'], $options['encoding']);
@@ -162,6 +170,7 @@ class Xml
         if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
             return new \SimpleXMLElement($dom->saveXML());
         }
+
         return $dom;
     }
 
@@ -177,13 +186,13 @@ class Xml
      */
     protected static function _fromArray($dom, $node, &$data, $format)
     {
-        if ($data === null || $data === '' || !is_array($data)) {
+        if ($data === null || $data === '' || !\is_array($data)) {
             return;
         }
         foreach ($data as $key => $value) {
-            if (is_string($key)) {
-                if (!is_array($value)) {
-                    if (is_bool($value)) {
+            if (\is_string($key)) {
+                if (!\is_array($value)) {
+                    if (\is_bool($value)) {
                         $value = (int)$value;
                     } elseif ($value === null) {
                         $value = '';
@@ -217,7 +226,7 @@ class Xml
                     if ($key[0] === '@') {
                         throw new \RuntimeException(Tools::poorManTranslate('fts-shared', 'Invalid array'));
                     }
-                    if (array_keys($value) === range(0, count($value) - 1)) { // List
+                    if (array_keys($value) === range(0, \count($value) - 1)) { // List
                         foreach ($value as $item) {
                             $data = compact('dom', 'node', 'key', 'format');
                             $data['value'] = $item;
@@ -239,13 +248,13 @@ class Xml
      * @param array $data Array with informations to create childs
      * @return void
      */
-    protected static function _createChild($data)
+    protected static function _createChild($data): void
     {
         $dom = $node = $key = $value = $format = null;
 
         extract($data, EXTR_OVERWRITE);
         $childNS = $childValue = null;
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (array_key_exists('@', $value)) {
                 $childValue = (string)$value['@'];
                 unset($value['@']);
@@ -286,9 +295,10 @@ class Xml
         if (!($obj instanceof \SimpleXMLElement)) {
             throw new \RuntimeException(Tools::poorManTranslate('fts-shared', 'The input is not instance of SimpleXMLElement, DOMDocument or DOMNode.'));
         }
-        $result = array();
-        $namespaces = array_merge(array('' => ''), $obj->getNamespaces(true));
+        $result = [];
+        $namespaces = array_merge(['' => ''], $obj->getNamespaces(true));
         self::_toArray($obj, $result, '', array_keys($namespaces));
+
         return $result;
     }
 
@@ -303,7 +313,7 @@ class Xml
      */
     protected static function _toArray($xml, &$parentData, $ns, $namespaces)
     {
-        $data = array();
+        $data = [];
 
         foreach ($namespaces as $namespace) {
             foreach ($xml->attributes($namespace, true) as $key => $value) {
@@ -330,8 +340,8 @@ class Xml
         }
         $name = $ns . $xml->getName();
         if (array_key_exists($name, $parentData)) {
-            if (!is_array($parentData[$name]) || !array_key_exists(0, $parentData[$name][0])) {
-                $parentData[$name] = array($parentData[$name]);
+            if (!\is_array($parentData[$name]) || !array_key_exists(0, $parentData[$name][0])) {
+                $parentData[$name] = [$parentData[$name]];
             }
             $parentData[$name][] = $data;
         } else {

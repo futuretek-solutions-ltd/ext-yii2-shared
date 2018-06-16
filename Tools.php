@@ -66,7 +66,7 @@ class Tools
     /** Sunday */
     const DOW_SUNDAY = 6;
 
-    private static $_countryCodes = array(
+    private static $_countryCodes = [
         'AND' => 'AD', 'ARE' => 'AE', 'AFG' => 'AF', 'ATG' => 'AG', 'AIA' => 'AI', 'ALB' => 'AL', 'ARM' => 'AM', 'ANT' => 'AN', 'AGO' => 'AO', 'ARG' => 'AR',
         'ASM' => 'AS', 'AUT' => 'AT', 'AUS' => 'AU', 'ABW' => 'AW', 'AZE' => 'AZ', 'BIH' => 'BA', 'BRB' => 'BB', 'BGD' => 'BD', 'BEL' => 'BE', 'BFA' => 'BF',
         'BGR' => 'BG', 'BHR' => 'BH', 'BDI' => 'BI', 'BEN' => 'BJ', 'BMU' => 'BM', 'BRN' => 'BN', 'BOL' => 'BO', 'BRA' => 'BR', 'BHS' => 'BS', 'BTN' => 'BT',
@@ -90,7 +90,7 @@ class Tools
         'TKM' => 'TM', 'TUN' => 'TN', 'TON' => 'TO', 'TUR' => 'TR', 'TTO' => 'TT', 'TUV' => 'TV', 'TWN' => 'TW', 'TZA' => 'TZ', 'UKR' => 'UA', 'UGA' => 'UG',
         'USA' => 'US', 'URY' => 'UY', 'UZB' => 'UZ', 'VAT' => 'VA', 'VCT' => 'VC', 'VEN' => 'VE', 'VGB' => 'VG', 'VIR' => 'VI', 'VNM' => 'VN', 'VUT' => 'VU',
         'WLF' => 'WF', 'WSM' => 'WS', 'YEM' => 'YE', 'ZAF' => 'ZA', 'ZMB' => 'ZM', 'ZWE' => 'ZW',
-    );
+    ];
 
     /**
      * Remove all space characters in string
@@ -137,7 +137,7 @@ class Tools
         }
 
         $phoneNumber = self::removeSpace($phoneNumber);
-        $phoneLen = strlen($phoneNumber);
+        $phoneLen = \strlen($phoneNumber);
 
         if ($phoneLen > 9 && 0 !== strpos($phoneNumber, '+')) {
             $phoneNumber = '+' . $phoneNumber;
@@ -197,7 +197,7 @@ class Tools
         }
 
         //Make sure we have timestamp
-        if (!is_int($value)) {
+        if (!\is_int($value)) {
             $value = strtotime($value);
         }
         switch ($format) {
@@ -239,18 +239,18 @@ class Tools
         }
 
         $monthNames = [
-            1 => Tools::poorManTranslate('fts-shared', 'January'),
-            2 => Tools::poorManTranslate('fts-shared', 'February'),
-            3 => Tools::poorManTranslate('fts-shared', 'March'),
-            4 => Tools::poorManTranslate('fts-shared', 'April'),
-            5 => Tools::poorManTranslate('fts-shared', 'May'),
-            6 => Tools::poorManTranslate('fts-shared', 'June'),
-            7 => Tools::poorManTranslate('fts-shared', 'July'),
-            8 => Tools::poorManTranslate('fts-shared', 'August'),
-            9 => Tools::poorManTranslate('fts-shared', 'September'),
-            10 => Tools::poorManTranslate('fts-shared', 'October'),
-            11 => Tools::poorManTranslate('fts-shared', 'November'),
-            12 => Tools::poorManTranslate('fts-shared', 'December'),
+            1 => self::poorManTranslate('fts-shared', 'January'),
+            2 => self::poorManTranslate('fts-shared', 'February'),
+            3 => self::poorManTranslate('fts-shared', 'March'),
+            4 => self::poorManTranslate('fts-shared', 'April'),
+            5 => self::poorManTranslate('fts-shared', 'May'),
+            6 => self::poorManTranslate('fts-shared', 'June'),
+            7 => self::poorManTranslate('fts-shared', 'July'),
+            8 => self::poorManTranslate('fts-shared', 'August'),
+            9 => self::poorManTranslate('fts-shared', 'September'),
+            10 => self::poorManTranslate('fts-shared', 'October'),
+            11 => self::poorManTranslate('fts-shared', 'November'),
+            12 => self::poorManTranslate('fts-shared', 'December'),
         ];
 
         return $monthNames[$month];
@@ -271,13 +271,13 @@ class Tools
         }
 
         $dayNames = [
-            self::DOW_MONDAY => Tools::poorManTranslate('fts-shared', 'Monday'),
-            self::DOW_TUESDAY => Tools::poorManTranslate('fts-shared', 'Tuesday'),
-            self::DOW_WEDNESDAY => Tools::poorManTranslate('fts-shared', 'Wednesday'),
-            self::DOW_THURSDAY => Tools::poorManTranslate('fts-shared', 'Thursday'),
-            self::DOW_FRIDAY => Tools::poorManTranslate('fts-shared', 'Friday'),
-            self::DOW_SATURDAY => Tools::poorManTranslate('fts-shared', 'Saturday'),
-            self::DOW_SUNDAY => Tools::poorManTranslate('fts-shared', 'Sunday'),
+            self::DOW_MONDAY => self::poorManTranslate('fts-shared', 'Monday'),
+            self::DOW_TUESDAY => self::poorManTranslate('fts-shared', 'Tuesday'),
+            self::DOW_WEDNESDAY => self::poorManTranslate('fts-shared', 'Wednesday'),
+            self::DOW_THURSDAY => self::poorManTranslate('fts-shared', 'Thursday'),
+            self::DOW_FRIDAY => self::poorManTranslate('fts-shared', 'Friday'),
+            self::DOW_SATURDAY => self::poorManTranslate('fts-shared', 'Saturday'),
+            self::DOW_SUNDAY => self::poorManTranslate('fts-shared', 'Sunday'),
         ];
 
         return $dayNames[$day];
@@ -294,7 +294,7 @@ class Tools
     public static function getRelativeTime($value)
     {
         //Make sure we have timestamp
-        if (!is_int($value)) {
+        if (!\is_int($value)) {
             $value = strtotime($value);
         }
 
@@ -302,56 +302,80 @@ class Tools
         if ($value < time()) {
             if ($diff < 60) {
                 //Less than a minute
-                return Tools::poorManTranslate('fts-shared', 'a few seconds ago');
-            } elseif ($diff < 3600) {
-                //Less than a hour
-                return Tools::poorManTranslate('fts-shared', 'a {n, plural, =1{minute} other{# minutes}} ago', ['n' => floor($diff / 60)]);
-            } elseif ($diff < 86400) {
-                //Less than a day
-                return Tools::poorManTranslate('fts-shared', 'a {n, plural, =1{hour} other{# hours}} ago', ['n' => floor($diff / 3600)]);
-            } elseif ($diff < 172800) {
-                //Less than two days
-                return Tools::poorManTranslate('fts-shared', 'yesterday');
-            } elseif ($diff < 604800) {
-                //Less than a week
-                return Tools::poorManTranslate('fts-shared', 'a {n} days ago', ['n' => floor($diff / 86400)]);
-            } elseif ($diff < 2628000) {
-                //Less than a month
-                return Tools::poorManTranslate('fts-shared', 'a {n, plural, =1{week} other{# weeks}} ago', ['n' => floor($diff / 604800)]);
-            } elseif ($diff < 31556926) {
-                //Less than a year
-                return Tools::poorManTranslate('fts-shared', 'a {n, plural, =1{month} other{# months}} ago', ['n' => floor($diff / 2628000)]);
-            } else {
-                //Less than eternity :-)
-                return Tools::poorManTranslate('fts-shared', 'a {n, plural, =1{year} other{# years}} ago', ['n' => floor($diff / 31556926)]);
+                return self::poorManTranslate('fts-shared', 'a few seconds ago');
             }
-        } else {
-            if ($diff < 60) {
-                //Less than a minute
-                return Tools::poorManTranslate('fts-shared', 'after a few seconds');
-            } elseif ($diff < 3600) {
+
+            if ($diff < 3600) {
                 //Less than a hour
-                return Tools::poorManTranslate('fts-shared', 'after a {n, plural, =1{minute} other{# minutes}}', ['n' => floor($diff / 60)]);
-            } elseif ($diff < 86400) {
-                //Less than a day
-                return Tools::poorManTranslate('fts-shared', 'after a {n, plural, =1{hour} other{# hours}}', ['n' => floor($diff / 3600)]);
-            } elseif ($diff < 172800) {
-                //Less than two days
-                return Tools::poorManTranslate('fts-shared', 'tomorrow');
-            } elseif ($diff < 604800) {
-                //Less than a week
-                return Tools::poorManTranslate('fts-shared', 'after a {n, plural, =1{day} other{# days}}', ['n' => floor($diff / 86400)]);
-            } elseif ($diff < 2628000) {
-                //Less than a month
-                return Tools::poorManTranslate('fts-shared', 'after a {n, plural, =1{week} other{# weeks}}', ['n' => floor($diff / 604800)]);
-            } elseif ($diff < 31556926) {
-                //Less than a year
-                return Tools::poorManTranslate('fts-shared', 'after a {n, plural, =1{month} other{# months}}', ['n' => floor($diff / 2628000)]);
-            } else {
-                //Less than eternity :-)
-                return Tools::poorManTranslate('fts-shared', 'after a {n, plural, =1{year} other{# years}}', ['n' => floor($diff / 31556926)]);
+                return self::poorManTranslate('fts-shared', 'a {n, plural, =1{minute} other{# minutes}} ago', ['n' => floor($diff / 60)]);
             }
+
+            if ($diff < 86400) {
+                //Less than a day
+                return self::poorManTranslate('fts-shared', 'a {n, plural, =1{hour} other{# hours}} ago', ['n' => floor($diff / 3600)]);
+            }
+
+            if ($diff < 172800) {
+                //Less than two days
+                return self::poorManTranslate('fts-shared', 'yesterday');
+            }
+
+            if ($diff < 604800) {
+                //Less than a week
+                return self::poorManTranslate('fts-shared', 'a {n} days ago', ['n' => floor($diff / 86400)]);
+            }
+
+            if ($diff < 2628000) {
+                //Less than a month
+                return self::poorManTranslate('fts-shared', 'a {n, plural, =1{week} other{# weeks}} ago', ['n' => floor($diff / 604800)]);
+            }
+
+            if ($diff < 31556926) {
+                //Less than a year
+                return self::poorManTranslate('fts-shared', 'a {n, plural, =1{month} other{# months}} ago', ['n' => floor($diff / 2628000)]);
+            }
+
+            //Less than eternity :-)
+            return self::poorManTranslate('fts-shared', 'a {n, plural, =1{year} other{# years}} ago', ['n' => floor($diff / 31556926)]);
         }
+
+        if ($diff < 60) {
+            //Less than a minute
+            return self::poorManTranslate('fts-shared', 'after a few seconds');
+        }
+
+        if ($diff < 3600) {
+            //Less than a hour
+            return self::poorManTranslate('fts-shared', 'after a {n, plural, =1{minute} other{# minutes}}', ['n' => floor($diff / 60)]);
+        }
+
+        if ($diff < 86400) {
+            //Less than a day
+            return self::poorManTranslate('fts-shared', 'after a {n, plural, =1{hour} other{# hours}}', ['n' => floor($diff / 3600)]);
+        }
+
+        if ($diff < 172800) {
+            //Less than two days
+            return self::poorManTranslate('fts-shared', 'tomorrow');
+        }
+
+        if ($diff < 604800) {
+            //Less than a week
+            return self::poorManTranslate('fts-shared', 'after a {n, plural, =1{day} other{# days}}', ['n' => floor($diff / 86400)]);
+        }
+
+        if ($diff < 2628000) {
+            //Less than a month
+            return self::poorManTranslate('fts-shared', 'after a {n, plural, =1{week} other{# weeks}}', ['n' => floor($diff / 604800)]);
+        }
+
+        if ($diff < 31556926) {
+            //Less than a year
+            return self::poorManTranslate('fts-shared', 'after a {n, plural, =1{month} other{# months}}', ['n' => floor($diff / 2628000)]);
+        }
+
+        //Less than eternity :-)
+        return self::poorManTranslate('fts-shared', 'after a {n, plural, =1{year} other{# years}}', ['n' => floor($diff / 31556926)]);
     }
 
     /**
@@ -367,11 +391,11 @@ class Tools
      */
     public static function truncate($string, $limit, $break = ' ', $pad = '...')
     {
-        if (strlen($string) <= $limit) {
+        if (\strlen($string) <= $limit) {
             return $string;
         }
 
-        if (false !== ($breakpoint = strpos($string, $break, $limit)) && $breakpoint < strlen($string) - 1) {
+        if (false !== ($breakpoint = strpos($string, $break, $limit)) && $breakpoint < \strlen($string) - 1) {
             $string = substr($string, 0, $breakpoint) . $pad;
         } else {
             $string = substr($string, 0, $limit) . $pad;
@@ -425,9 +449,9 @@ class Tools
         $nHex = str_replace(['-', '{', '}'], '', $namespace);
         $nStr = '';
 
-        $nHexLen = strlen($nHex);
+        $nHexLen = \strlen($nHex);
         for ($i = 0; $i < $nHexLen; $i += 2) {
-            $nStr .= chr(intval($nHex[$i] . $nHex[$i + 1], 16));
+            $nStr .= \chr(\intval($nHex[$i] . $nHex[$i + 1], 16));
         }
 
         $hash = sha1($nStr . $name);
@@ -436,8 +460,8 @@ class Tools
             '%08s-%04s-%04x-%04x-%12s',
             substr($hash, 0, 8),
             substr($hash, 8, 4),
-            (intval(substr($hash, 12, 4), 16) & 0x0fff) | 0x5000,
-            (intval(substr($hash, 16, 4), 16) & 0x3fff) | 0x8000,
+            (\intval(substr($hash, 12, 4), 16) & 0x0fff) | 0x5000,
+            (\intval(substr($hash, 16, 4), 16) & 0x3fff) | 0x8000,
             substr($hash, 20, 12)
         );
     }
@@ -457,7 +481,9 @@ class Tools
             $str = ucfirst($str);
         }
 
-        return preg_replace_callback('/_+([a-z])/', create_function('$c', 'return strtoupper($c[1]);'), $str);
+        return preg_replace_callback('/_+([a-z])/', function ($c) {
+            return strtoupper($c[1]);
+        }, $str);
     }
 
     /**
@@ -510,7 +536,7 @@ class Tools
         }
 
         for ($i = 0, $passwd = ''; $i < $length; $i++) {
-            $passwd .= substr($str, mt_rand(0, strlen($str) - 1), 1);
+            $passwd .= substr($str, mt_rand(0, \\strlen($str) - 1), 1);
         }
 
         return $passwd;
@@ -533,9 +559,9 @@ class Tools
                 $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
                 return $ips[0];
-            } else {
-                return $_SERVER['HTTP_X_FORWARDED_FOR'];
             }
+
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
 
         return $_SERVER['REMOTE_ADDR'];
@@ -552,11 +578,11 @@ class Tools
     public static function deleteDirectory($dirName, $deleteSelf = true)
     {
         $dirName = rtrim($dirName, '/') . '/';
-        if (file_exists($dirName) && $files = scandir($dirName)) {
+        if (file_exists($dirName) && $files = scandir($dirName, SCANDIR_SORT_NONE)) {
             foreach ($files as $file) {
                 if ($file !== '.' && $file !== '..' && $file !== '.svn') {
                     if (is_dir($dirName . $file)) {
-                        Tools::deleteDirectory($dirName . $file, true);
+                        self::deleteDirectory($dirName . $file, true);
                     } elseif (file_exists($dirName . $file)) {
                         @chmod($dirName . $file, 0777); // NT ?
                         unlink($dirName . $file);
@@ -581,13 +607,13 @@ class Tools
      * @param string $file File path
      * @param array $excludeFiles Excluded files
      */
-    public static function deleteFile($file, $excludeFiles = [])
+    public static function deleteFile($file, array $excludeFiles = [])
     {
-        if (!is_array($excludeFiles)) {
+        if (!\\is_array($excludeFiles)) {
             $excludeFiles = [$excludeFiles];
         }
 
-        if (file_exists($file) && is_file($file) && in_array(basename($file), $excludeFiles, true) === false) {
+        if (file_exists($file) && is_file($file) && \\in_array(basename($file), $excludeFiles, true) === false) {
             @chmod($file, 0777); // NT ?
             unlink($file);
         }
@@ -859,7 +885,7 @@ class Tools
         $base = log($size) / log(1024);
         $suffixes = ['', 'k', 'M', 'G', 'T'];
 
-        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[(int)floor($base)];
+        return round(1024 ** ($base - floor($base)), $precision) . $suffixes[(int)floor($base)];
     }
 
     /**
@@ -873,24 +899,24 @@ class Tools
     {
         if (is_numeric($value)) {
             return $value;
-        } else {
-            $value_length = strlen($value);
-            $qty = (int)substr($value, 0, $value_length - 1);
-            $unit = strtolower(substr($value, $value_length - 1));
-            switch ($unit) {
-                case 'k':
-                    $qty *= 1024;
-                    break;
-                case 'm':
-                    $qty *= 1048576;
-                    break;
-                case 'g':
-                    $qty *= 1073741824;
-                    break;
-            }
-
-            return $qty;
         }
+
+        $value_length = strlen($value);
+        $qty = (int)substr($value, 0, $value_length - 1);
+        $unit = strtolower(substr($value, $value_length - 1));
+        switch ($unit) {
+            case 'k':
+                $qty *= 1024;
+                break;
+            case 'm':
+                $qty *= 1048576;
+                break;
+            case 'g':
+                $qty *= 1073741824;
+                break;
+        }
+
+        return $qty;
     }
 
     /**
@@ -1002,12 +1028,12 @@ class Tools
         }
 
         if (strpos($range, '*') !== false) {
-            $range = Tools::ipWildcardToCIDR($range);
+            $range = self::ipWildcardToCIDR($range);
         }
 
         @list($net, $bits) = explode('/', $range);
         $bits = null !== $bits ? $bits : 32;
-        $bitMask = -pow(2, 32 - $bits) & 0x00000000FFFFFFFF;
+        $bitMask = -2 ** (32 - $bits) & 0x00000000FFFFFFFF;
         $netMask = ip2long($net) & $bitMask;
         $ip_bits = ip2long($ip) & $bitMask;
 
@@ -1037,7 +1063,7 @@ class Tools
      */
     public static function getDirectoryFilesCount($directory)
     {
-        return count(scandir($directory)) - 2;
+        return \\count(scandir($directory, SCANDIR_SORT_NONE)) - 2;
     }
 
     /**
@@ -1053,9 +1079,9 @@ class Tools
     public static function isCzechHoliday($date)
     {
         if (!$date instanceof DateTime) {
-            if (is_int($date)) {
+            if (\is_int($date)) {
                 $date = new DateTime('@' . $date);
-            } elseif (is_string($date)) {
+            } elseif (\is_string($date)) {
                 $date = new DateTime($date);
             } else {
                 throw new RuntimeException(self::poorManTranslate('fts-shared', 'Invalid date format'));
@@ -1064,7 +1090,7 @@ class Tools
 
         $holidays = ['01-01', '05-01', '05-08', '07-05', '07-06', '09-28', '10-28', '11-17', '12-24', '12-25', '12-26'];
 
-        if (in_array($date->format('m-d'), $holidays, true)) {
+        if (\in_array($date->format('m-d'), $holidays, true)) {
             return true;
         }
 
@@ -1093,7 +1119,7 @@ class Tools
     {
         if ($time === null) {
             $time = time();
-        } elseif (is_string($time)) {
+        } elseif (\is_string($time)) {
             $time = strtotime($time);
         }
 
@@ -1106,30 +1132,30 @@ class Tools
             case 5:
             case 6:
             case 7:
-                return Tools::poorManTranslate('fts-shared', 'Good morning');
+                return self::poorManTranslate('fts-shared', 'Good morning');
             case 8:
             case 9:
             case 10:
             case 11:
                 //Underscore to better translate something between morning and noon
-                return trim(Tools::poorManTranslate('fts-shared', '_Good morning'), '_');
+                return trim(self::poorManTranslate('fts-shared', '_Good morning'), '_');
             case 12:
-                return Tools::poorManTranslate('fts-shared', 'Good noon');
+                return self::poorManTranslate('fts-shared', 'Good noon');
             case 13:
             case 14:
             case 15:
             case 16:
-                return Tools::poorManTranslate('fts-shared', 'Good afternoon');
+                return self::poorManTranslate('fts-shared', 'Good afternoon');
             case 17:
             case 18:
             case 19:
                 //Underscore to better translate something between noon and evening
-                return trim(Tools::poorManTranslate('fts-shared', '_Good afternoon'), '_');
+                return trim(self::poorManTranslate('fts-shared', '_Good afternoon'), '_');
             case 20:
             case 21:
             case 22:
             case 23:
-                return Tools::poorManTranslate('fts-shared', 'Good evening');
+                return self::poorManTranslate('fts-shared', 'Good evening');
             default:
                 return '';
         }
@@ -1154,7 +1180,7 @@ class Tools
         $lon2 = deg2rad($lon2);
 
         $lonDelta = $lon2 - $lon1;
-        $a = pow(cos($lat2) * sin($lonDelta), 2) + pow(cos($lat1) * sin($lat2) - sin($lat1) * cos($lat2) * cos($lonDelta), 2);
+        $a = ((cos($lat2) * sin($lonDelta)) ** 2) + ((cos($lat1) * sin($lat2) - sin($lat1) * cos($lat2) * cos($lonDelta)) ** 2);
         $b = sin($lat1) * sin($lat2) + cos($lat1) * cos($lat2) * cos($lonDelta);
 
         return atan2(sqrt($a), $b) * 6371.0088;
@@ -1173,9 +1199,9 @@ class Tools
         if ($date === null) {
             $date = new DateTime();
         } elseif (!$date instanceof DateTime) {
-            if (is_int($date)) {
+            if (\is_int($date)) {
                 $date = new DateTime('@' . $date);
-            } elseif (is_string($date)) {
+            } elseif (\is_string($date)) {
                 $date = new DateTime($date);
             } else {
                 throw new RuntimeException(self::poorManTranslate('fts-shared', 'Invalid date format'));
@@ -1202,7 +1228,7 @@ class Tools
         $pos = strrpos($category, '/');
         $category = $pos === false ? $category : substr($category, $pos + 1);
         $translation = @include 'messages/cs/' . $category . '.php';
-        if ($translation !== null && is_array($translation) && array_key_exists($text, $translation)) {
+        if ($translation !== null && \is_array($translation) && array_key_exists($text, $translation)) {
             $keys = array_keys($params);
             array_walk($keys, function (&$v) {
                 $v = '{' . $v . '}';
@@ -1223,17 +1249,17 @@ class Tools
      */
     public static function linkRewrite($str, $allowUnicodeChars = false)
     {
-        if (!is_string($str)) {
+        if (!\is_string($str)) {
             return false;
         }
 
         $str = trim($str);
 
-        if (function_exists('mb_strtolower')) {
+        if (\function_exists('mb_strtolower')) {
             $str = mb_strtolower($str, 'utf-8');
         }
         if (!$allowUnicodeChars) {
-            $str = Tools::replaceAccentedChars($str);
+            $str = self::replaceAccentedChars($str);
         }
 
         // Remove all non-whitelist chars.
@@ -1244,11 +1270,11 @@ class Tools
         }
 
         $str = preg_replace('/[\s\'\:\/\[\]\-]+/', ' ', $str);
-        $str = str_replace(array(' ', '/'), '-', $str);
+        $str = str_replace([' ', '/'], '-', $str);
 
         // If it was not possible to lowercase the string with mb_strtolower, we do it after the transformations.
         // This way we lose fewer special chars.
-        if (!function_exists('mb_strtolower')) {
+        if (!\function_exists('mb_strtolower')) {
             $str = strtolower($str);
         }
 
@@ -1318,11 +1344,9 @@ class Tools
 
         if ($mask % 1000000 === 0 || $mask % 1000000 === 999999) {
             return self::generatePin($salt . $seed, $length, $useMinutes);
-        } else {
-            return round(
-                (((float)($mask % 1000000) - 0.5 + ((float)($mask % 200) / 199)) / 999999) *
-                ((pow(10, $length) - 1) - pow(10, $length - 1)) + pow(10, $length - 1));
         }
+
+        return round((((float)($mask % 1000000) - 0.5 + ((float)($mask % 200) / 199)) / 999999) * (((10 ** $length) - 1) - (10 ** ($length - 1))) + (10 ** ($length - 1)));
     }
 
     /**
@@ -1510,7 +1534,7 @@ class Tools
     {
         array_unshift($array, null);
 
-        return call_user_func_array('array_map', $array);
+        return \\call_user_func_array('array_map', $array);
     }
 
     /**
@@ -1521,17 +1545,17 @@ class Tools
      */
     public static function maxCount()
     {
-        $array = func_get_args();
-        if (!is_array($array)) {
+        $array = \func_get_args();
+        if (!\is_array($array)) {
             return 0;
         }
 
         $maxCnt = 0;
         foreach ($array as $item) {
-            if (!is_array($item)) {
+            if (!\is_array($item)) {
                 continue;
             }
-            $cnt = count($item);
+            $cnt = \count($item);
             $maxCnt = $cnt > $maxCnt ? $cnt : $maxCnt;
         }
 
@@ -1547,7 +1571,7 @@ class Tools
      */
     public static function fillToSize(&$array, $size, $fill)
     {
-        $cnt = count($array);
+        $cnt = \count($array);
         if ($cnt >= $size) {
             return;
         }
