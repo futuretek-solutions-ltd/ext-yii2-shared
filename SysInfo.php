@@ -120,7 +120,7 @@ class SysInfo
         if (self::isWindows()) {
             $uuid = explode("\r\n", trim(shell_exec('wmic csproduct get UUID')));
 
-            return (\\count($uuid) === 2 ? $uuid[1] : false);
+            return (\count($uuid) === 2 ? $uuid[1] : false);
         }
 
         $uuid = trim(shell_exec('hostid'));

@@ -536,7 +536,7 @@ class Tools
         }
 
         for ($i = 0, $passwd = ''; $i < $length; $i++) {
-            $passwd .= substr($str, mt_rand(0, \\strlen($str) - 1), 1);
+            $passwd .= substr($str, mt_rand(0, \strlen($str) - 1), 1);
         }
 
         return $passwd;
@@ -609,11 +609,11 @@ class Tools
      */
     public static function deleteFile($file, array $excludeFiles = [])
     {
-        if (!\\is_array($excludeFiles)) {
+        if (!\is_array($excludeFiles)) {
             $excludeFiles = [$excludeFiles];
         }
 
-        if (file_exists($file) && is_file($file) && \\in_array(basename($file), $excludeFiles, true) === false) {
+        if (file_exists($file) && is_file($file) && \in_array(basename($file), $excludeFiles, true) === false) {
             @chmod($file, 0777); // NT ?
             unlink($file);
         }
@@ -1063,7 +1063,7 @@ class Tools
      */
     public static function getDirectoryFilesCount($directory)
     {
-        return \\count(scandir($directory, SCANDIR_SORT_NONE)) - 2;
+        return \count(scandir($directory, SCANDIR_SORT_NONE)) - 2;
     }
 
     /**
@@ -1534,7 +1534,7 @@ class Tools
     {
         array_unshift($array, null);
 
-        return \\call_user_func_array('array_map', $array);
+        return \call_user_func_array('array_map', $array);
     }
 
     /**

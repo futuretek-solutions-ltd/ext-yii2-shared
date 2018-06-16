@@ -1129,7 +1129,7 @@ class Inflection
 
         $result = self::$instance->inflect($text, $animate, $preferredGender);
 
-        if (14 === \\count($result)) {
+        if (14 === \count($result)) {
             return trim($result[$case + ((int)$plural * 7)]);
         }
 
