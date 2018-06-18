@@ -375,6 +375,10 @@ class Validate
      */
     public static function isPhoneNumber2($number, $country)
     {
+        if (empty($number)) {
+            return false;
+        }
+
         $phoneUtil = PhoneNumberUtil::getInstance();
         try {
             $numberProto = $phoneUtil->parse($number, strtoupper($country));
