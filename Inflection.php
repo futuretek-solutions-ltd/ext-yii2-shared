@@ -12,6 +12,10 @@ namespace futuretek\shared;
  */
 class Inflection
 {
+    const GENDER_MASCULINE = 'M';
+    const GENDER_FEMININE = 'Z';
+    const GENDER_NEUTER = 'S';
+
     private $_v1i;
     protected static $instance;
 
@@ -311,6 +315,8 @@ class Inflection
         $this->v1[$nv1++] = ['havel', 'havl', 'havla'];
         $this->v1[$nv1++] = ['Bořek', 'Bořk', 'Bořka'];
         $this->v1[$nv1++] = ['bořek', 'bořk', 'bořka'];
+        $this->v1[$nv1++] = ['Hájek', 'Hájk', 'Hájka'];
+        $this->v1[$nv1++] = ['hájek', 'hájk', 'hájka'];
         $this->v1[$nv1++] = ['Luděk', 'Luďk', 'Luďka'];
         $this->v1[$nv1++] = ['luděk', 'luďk', 'luďka'];
         $this->v1[$nv1++] = ['pes', 'ps', 'psa'];
@@ -442,6 +448,12 @@ class Inflection
         $this->v10[$nv10++] = 'Mikuláš';
         $this->v10[$nv10++] = 'Mikoláš';
         $this->v10[$nv10++] = 'mikoláš';
+        $this->v10[$nv10++] = 'Miloš';
+        $this->v10[$nv10++] = 'miloš';
+        $this->v10[$nv10++] = 'Iliaš';
+        $this->v10[$nv10++] = 'iliaš';
+        $this->v10[$nv10++] = 'Kůst';
+        $this->v10[$nv10++] = 'kůst';
         $this->v10[$nv10++] = 'Kvido';
         $this->v10[$nv10++] = 'kvido';
         $this->v10[$nv10++] = 'Hugo';
@@ -1135,5 +1147,4 @@ class Inflection
 
         return trim($text);
     }
-
 }
