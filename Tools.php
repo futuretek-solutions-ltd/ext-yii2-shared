@@ -1413,9 +1413,10 @@ class Tools
      * @param int $seconds Time in seconds
      * @param int $dayLength Length of the work day in seconds
      * @param int $weekLength Length of the work week is seconds
+     * @param string $useUnits Units to use (default all units)
      * @return string Pretty time format
      */
-    public static function secondsToPrettyTime($seconds, $dayLength = 28800, $weekLength = 144000)
+    public static function secondsToPrettyTime($seconds, $dayLength = 28800, $weekLength = 144000, $useUnits = 'wdhm')
     {
         $minus = $seconds < 0;
         $seconds = (int)abs($seconds);
@@ -1426,7 +1427,7 @@ class Tools
         $out = [];
         $units = ['w' => $weekLength, 'd' => $dayLength, 'h' => 3600, 'm' => 60, 's' => 1];
         foreach ($units as $sign => $value) {
-            if ($seconds < $value) {
+            if ($seconds < $value || false === strpos($useUnits, $sign)) {
                 continue;
             }
 
