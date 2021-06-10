@@ -2,8 +2,9 @@
 
 namespace futuretek\shared;
 
-use PHPQRCode\Constants;
-use PHPQRCode\QRcode;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Exception\InvalidWriterException;
+use Endroid\QrCode\QrCode;
 use RuntimeException;
 
 /**
@@ -384,8 +385,9 @@ class QRPayment
      * @param int $level QR code error correction level - please see Constants::QR_ECLEVEL_*
      * @param int $size QR code size (1 - 1024)
      * @param int $margin QR code margin
+     * @throws InvalidWriterException
      */
-    public function generateImage($filename = false, $level = Constants::QR_ECLEVEL_L, $size = 3, $margin = 4)
+    public function generateImage($filename = false, $level = ErrorCorrectionLevel::LOW, $size = 160, $margin = 4)
     {
         $result = 'SPD' . self::DELIMITER . $this->version . self::DELIMITER . $this->implodeContent();
 
@@ -393,7 +395,24 @@ class QRPayment
             $result .= self::DELIMITER . 'CRC32:' . sprintf('%x', crc32($result));
         }
 
-        QRcode::png($result, $filename, $level, $size, $margin);
+        $qrCode = new QrCode($result);
+        $qrCode
+            ->setWriterByName('png')
+            ->setSize($size)
+            ->setMargin($margin)
+            //->setEncoding('UTF-8')
+            ->setErrorCorrectionLevel($level)
+            ->setValidateResult(false);
+
+        if ($filename) {
+            $qrCode->writeFile($filename);
+
+            return;
+        }
+
+        header('Content-Type: ' . $qrCode->getContentType());
+        echo $qrCode->writeString();
+
         die();
     }
 
