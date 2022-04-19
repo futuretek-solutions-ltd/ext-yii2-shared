@@ -2,9 +2,12 @@
 
 namespace futuretek\shared;
 
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Exception\InvalidWriterException;
 use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 use RuntimeException;
 
 /**
@@ -382,12 +385,25 @@ class QRPayment
      * Generate SPD as PNG image and output it
      *
      * @param string|bool $filename Image filename
-     * @param int $level QR code error correction level - please see Constants::QR_ECLEVEL_*
+     * @param int $level Not used - deprecated
      * @param int $size QR code size (1 - 1024)
      * @param int $margin QR code margin
-     * @throws InvalidWriterException
+     * @deprecated Use generateQrImage instead
      */
-    public function generateImage($filename = false, $level = ErrorCorrectionLevel::LOW, $size = 160, $margin = 4)
+    public function generateImage($filename = false, $level = null, $size = 160, $margin = 4)
+    {
+        $this->generateQrImage($filename, $size, $margin);
+    }
+
+    /**
+     * Generate SPD as PNG image and output it
+     *
+     * @param string|bool $filename Image filename
+     * @param int $size QR code size (1 - 1024)
+     * @param int $margin QR code margin
+     * @throws \Exception
+     */
+    public function generateQrImage($filename = false, $size = 160, $margin = 4)
     {
         $result = 'SPD' . self::DELIMITER . $this->version . self::DELIMITER . $this->implodeContent();
 
@@ -395,37 +411,30 @@ class QRPayment
             $result .= self::DELIMITER . 'CRC32:' . sprintf('%x', crc32($result));
         }
 
-        $qrCode = new QrCode($result);
-        $qrCode
-            ->setWriterByName('png')
+        // Create QR code
+        $qrCode = QrCode::create($result)
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(new ErrorCorrectionLevel\ErrorCorrectionLevelMedium())
             ->setSize($size)
             ->setMargin($margin)
-            //->setEncoding('UTF-8')
-            ->setErrorCorrectionLevel($level)
-            ->setValidateResult(false);
+            ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
 
         if ($filename) {
-            $qrCode->writeFile($filename);
+            $result->saveToFile($filename);
 
             return;
         }
 
-        header('Content-Type: ' . $qrCode->getContentType());
-        echo $qrCode->writeString();
+        // Directly output the QR code
+        header('Content-Type: ' . $result->getMimeType());
+        echo $result->getString();
 
         die();
-    }
-
-    /**
-     * Generate SPD
-     *
-     * @return string
-     *
-     * @deprecated  Please use QRPayment::generateText() instead
-     */
-    public function generate()
-    {
-        return $this->generateText();
     }
 
     /**
