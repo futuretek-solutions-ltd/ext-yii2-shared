@@ -56,6 +56,9 @@ class ObjectMapper
                 $propType = $ref->getProperty($name)->getType();
                 $type = $propType instanceof \ReflectionType ? $propType->getName() : null;
                 switch ($type) {
+                    case Date::class:
+                        $object->$name = $value instanceof Date || $value === null ? $value : new Date($value);
+                        break;
                     case \DateTime::class:
                         $object->$name = $value instanceof \DateTime || $value === null ? $value : new \DateTime($value);
                         break;
