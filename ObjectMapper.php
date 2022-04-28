@@ -46,10 +46,11 @@ class ObjectMapper
                 } else {
                     //Single object
                     $className = $recursive[$name];
-                    $object->$name = $value;
                     if (is_array($value)) {
                         $object->$name = new $className();
                         static::configureRecursive($object->$name, $value, $recursive, $strict);
+                    } else {
+                        $object->$name = $value;
                     }
                 }
             } else {
