@@ -98,7 +98,7 @@ class ObjectMapper
      * @return array|mixed the array representation of the object
      * @throws \Exception
      */
-    protected static function toArray($object, array $properties = [], bool $recursive = true)
+    public static function toArray($object, array $properties = [], bool $recursive = true)
     {
         if (is_array($object)) {
             if ($recursive) {
