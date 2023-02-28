@@ -395,7 +395,7 @@ class Tools
             return $string;
         }
 
-        if (false !== ($breakpoint = strpos($string, $break, $limit)) && $breakpoint < \strlen($string) - 1) {
+        if (false !== ($breakpoint = strrpos(substr($string, 0, $limit), $break))) {
             $string = substr($string, 0, $breakpoint) . $pad;
         } else {
             $string = substr($string, 0, $limit) . $pad;
