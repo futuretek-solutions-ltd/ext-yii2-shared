@@ -410,7 +410,7 @@ class Validate
      */
     public static function isTimeOrNull($time)
     {
-        return preg_match('/^(([0-1]\d)|([2][0-3])):([0-5]\d):([0-5]\d)$/', $time) or $time === null;
+        return $time === null or preg_match('/^(([0-1]\d)|([2][0-3])):([0-5]\d):([0-5]\d)$/', $time);
     }
 
     /**
