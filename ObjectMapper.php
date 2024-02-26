@@ -142,8 +142,6 @@ class ObjectMapper
                 $result[$key] = $value;
             }
 
-            $result['@class'] = (new \ReflectionClass($object))->getShortName();
-
             return $recursive ? static::toArray($result, $properties) : $result;
         }
 
