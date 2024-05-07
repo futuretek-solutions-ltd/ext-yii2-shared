@@ -57,7 +57,7 @@ class ObjectMapper
                         $className = substr($recursive[$name], 0, -2);
                         foreach ($value as $idx => $subVal) {
                             $subObj = new $className();
-                            static::configureRecursive($subObj, $subVal, $recursive, $strict);
+                            static::toObject($subObj, $subVal, self::stripModelFromRelatedKeys($recursive, $name), $strict);
                             $object->$name[$idx] = $subObj;
                         }
                     }
@@ -66,7 +66,7 @@ class ObjectMapper
                     $className = $recursive[$name];
                     if (is_array($value)) {
                         $object->$name = new $className();
-                        static::configureRecursive($object->$name, $value, $recursive, $strict);
+                        static::toObject($object->$name, $value, self::stripModelFromRelatedKeys($recursive, $name), $strict);
                     } else {
                         $object->$name = $value;
                     }
@@ -223,5 +223,17 @@ class ObjectMapper
         }
 
         return $array instanceof ArrayAccess && $array->offsetExists($key);
+    }
+
+    protected static function stripModelFromRelatedKeys(array $relations, string $propertyName): array
+    {
+        $result = [];
+        foreach ($relations as $k => $v) {
+            if (strpos($k, $propertyName . '.') === 0) {
+                $result[substr($k, strlen($propertyName) + 1)] = $v;
+            }
+        }
+
+        return $result;
     }
 }
