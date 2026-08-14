@@ -23,9 +23,9 @@
         "source": "https://github.com/futuretek-solutions-ltd/ext-yii2-shared"
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.4",
         "giggsey/libphonenumber-for-php": "^8.12.35",
-        "endroid/qr-code": "^4.4.8"
+        "endroid/qr-code": "^6.0"
     },
     "autoload": {
         "psr-4": {

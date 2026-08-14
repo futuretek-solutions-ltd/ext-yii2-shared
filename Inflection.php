@@ -19,6 +19,18 @@ class Inflection
     private $_v1i;
     protected static $instance;
 
+    private $vzor;
+    private $isDbgMode;
+    private $aCmpReg;
+    private $v1;
+    private $v10;
+    private $v11;
+    private $v12;
+    private $v0;
+    private $v3;
+    private $PrefRod;
+    private $astrTvar;
+
     public function __construct()
     {
         //  Databaze vzoru pro sklonovani
